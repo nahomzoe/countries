@@ -1,10 +1,8 @@
-import "./App.css";
+// import "./App.css";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./pages/Layout";
-
 import Countries from "./components/Countries";
-
 import CountryDetail from "./components/CountryDetail";
 
 function App() {
@@ -12,8 +10,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route path="countries" element={<Countries />} />
-          <Route path="countries/:id" element={<CountryDetail />} />
+          <Route path="/" element={<Countries />} />
+          {/* <Route path="countries/:id" element={<CountryDetail />} /> */}
         </Route>
       </Routes>
     </BrowserRouter>
