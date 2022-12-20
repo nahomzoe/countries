@@ -1,10 +1,8 @@
 import * as React from "react";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  initializeCountries,
-  search,
-} from "../features/countries/countriesSlice";
+import { initializeCountries } from "../features/countries/countriesSlice";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -17,21 +15,20 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Link from "@mui/material/Link";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ImageListItem from "@mui/material/ImageListItem";
 
-export default function Countries() {
+export default function Countries({ setCountry }) {
   const dispatch = useDispatch();
   const countriesList = useSelector((state) => state.countries.countries);
   const loading = useSelector((state) => state.countries.isLoading);
   const searchInput = useSelector((state) => state.countries.search);
+  let navigate = useNavigate();
 
   useEffect(() => {
     dispatch(initializeCountries());
   }, [dispatch]);
   console.log(countriesList);
 
-  const searchfunc = (e) => {
-    dispatch(search(e.target.value));
-  };
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -71,12 +68,18 @@ export default function Countries() {
   ];
 
   function createData(row) {
+    const flag = (
+      <ImageListItem sx={{ width: 80, hight: 45 }}>
+        <img src={row.flags.png} alt={row.fifa} loading="lazy" />
+        {/* <ImageListItemBar position="below" title={item.author} /> */}
+      </ImageListItem>
+    );
     const detail = (
       <Tooltip title="See more">
         <IconButton>
           <Link
-          //   onClick={() => handleCustomerPage(row)}
-          //   to={`/singleCustomer/${row.field_project_customer_name[1]?.value}`}
+            onClick={() => handleCountryDetail(row)}
+            to={`/country/${row.name.common}`}
           >
             <ChevronRightIcon sx={{ fontSize: 20, color: "black" }} />
           </Link>
@@ -90,7 +93,7 @@ export default function Countries() {
     ));
 
     return {
-      flag: row.flag,
+      flag,
       name: row.name.common,
       region: row.region,
       population: row.population,
@@ -114,6 +117,13 @@ export default function Countries() {
       .map((row) => {
         rows.push(createData(row));
       });
+  const handleCountryDetail = (row) => {
+    const countryName = row.name.common;
+    // setSingleCustomer(customerProjects);
+    setCountry(row);
+    navigate(`/country/${countryName}`);
+    return row;
+  };
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
