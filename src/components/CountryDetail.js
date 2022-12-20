@@ -42,7 +42,7 @@ export default function CountryDetail({ country }) {
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
+            {country.name.common.charAt(0)}
           </Avatar>
         }
         action={
