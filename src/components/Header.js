@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { search } from "../features/countries/countriesSlice";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -52,6 +54,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function SearchAppBar() {
+  const dispatch = useDispatch();
+  const searchInput = useSelector((state) => state.countries.search);
+  const searchfunc = (e) => {
+    dispatch(search(e.target.value));
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -80,6 +87,7 @@ export default function SearchAppBar() {
             <StyledInputBase
               placeholder="Search by country name..."
               inputProps={{ "aria-label": "search" }}
+              onChange={searchfunc}
             />
           </Search>
         </Toolbar>

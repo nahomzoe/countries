@@ -70,7 +70,7 @@ export default function Countries() {
     },
   ];
 
-  function createData(flag, name, region, population, languages) {
+  function createData(row) {
     const detail = (
       <Tooltip title="See more">
         <IconButton>
@@ -83,26 +83,53 @@ export default function Countries() {
         </IconButton>
       </Tooltip>
     );
-    return { flag, name, region, population, languages, detail };
+    const languages = Object.values(row.languages || {}).map((language) => (
+      <div key={language}>
+        <p>{language} </p>
+      </div>
+    ));
+
+    return {
+      flag: row.flag,
+      name: row.name.common,
+      region: row.region,
+      population: row.population,
+      languages,
+      detail,
+    };
   }
 
   const rows = [
-    createData("Flag", "India", "IN", 1324171354, 3287263),
-    createData("Flag", "China", "CN", 1403500365, 9596961),
-    createData("Flag", "Italy", "IT", 60483973, 301340),
-    createData("Flag", "United States", "US", 327167434, 9833520),
-    createData("Flag", "Canada", "CA", 37602103, 9984670),
-    createData("Flag", "Australia", "AU", 25475400, 7692024),
-    createData("Flag", "Germany", "DE", 83019200, 357578),
-    createData("Flag", "Ireland", "IE", 4857000, 70273),
-    createData("Flag", "Mexico", "MX", 126577691, 1972550),
-    createData("Flag", "Japan", "JP", 126317000, 377973),
-    createData("Flag", "France", "FR", 67022000, 640679),
-    createData("Flag", "United Kingdom", "GB", 67545757, 242495),
-    createData("Flag", "Russia", "RU", 146793744, 17098246),
-    createData("Flag", "Nigeria", "NG", 200962417, 923768),
-    createData("Flag", "Brazil", "BR", 210147125, 8515767),
+    // createData("Flag", "India", "IN", 1324171354, 3287263),
+    // createData("Flag", "China", "CN", 1403500365, 9596961),
+    // createData("Flag", "Italy", "IT", 60483973, 301340),
+    // createData("Flag", "United States", "US", 327167434, 9833520),
+    // createData("Flag", "Canada", "CA", 37602103, 9984670),
+    // createData("Flag", "Australia", "AU", 25475400, 7692024),
+    // createData("Flag", "Germany", "DE", 83019200, 357578),
+    // createData("Flag", "Ireland", "IE", 4857000, 70273),
+    // createData("Flag", "Mexico", "MX", 126577691, 1972550),
+    // createData("Flag", "Japan", "JP", 126317000, 377973),
+    // createData("Flag", "France", "FR", 67022000, 640679),
+    // createData("Flag", "United Kingdom", "GB", 67545757, 242495),
+    // createData("Flag", "Russia", "RU", 146793744, 17098246),
+    // createData("Flag", "Nigeria", "NG", 200962417, 923768),
+    // createData("Flag", "Brazil", "BR", 210147125, 8515767),
   ];
+  countriesList &&
+    countriesList
+      .filter((row) => {
+        if (
+          row.name.common
+            .toLowerCase()
+            .includes(searchInput.toLowerCase().trim())
+        ) {
+          rows.push(createData(row));
+        }
+      })
+      .map((row) => {
+        rows.push(createData(row));
+      });
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
