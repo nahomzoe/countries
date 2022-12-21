@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeCountries } from "../features/countries/countriesSlice";
 import Paper from "@mui/material/Paper";
@@ -16,8 +16,10 @@ import Tooltip from "@mui/material/Tooltip";
 import Link from "@mui/material/Link";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ImageListItem from "@mui/material/ImageListItem";
+import { Typography } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 
-export default function Countries({ setCountry }) {
+export default function Countries() {
   const dispatch = useDispatch();
   const countriesList = useSelector((state) => state.countries.countries);
   const loading = useSelector((state) => state.countries.isLoading);
@@ -71,7 +73,6 @@ export default function Countries({ setCountry }) {
     const flag = (
       <ImageListItem sx={{ width: 80, hight: 45 }}>
         <img src={row.flags.png} alt={row.fifa} loading="lazy" />
-        {/* <ImageListItemBar position="below" title={item.author} /> */}
       </ImageListItem>
     );
     const detail = (
@@ -102,8 +103,8 @@ export default function Countries({ setCountry }) {
     };
   }
 
-  const rows = [];
-  countriesList &&
+  const rows =
+    countriesList &&
     countriesList
       .filter((row) => {
         if (
@@ -111,68 +112,80 @@ export default function Countries({ setCountry }) {
             .toLowerCase()
             .includes(searchInput.toLowerCase().trim())
         ) {
-          rows.push(createData(row));
+          return createData(row);
         }
       })
-      .map((row) => {
-        rows.push(createData(row));
-      });
+      .map((row) => createData(row));
+
   const handleCountryDetail = (row) => {
     const countryName = row.name.common;
-    // setSingleCustomer(customerProjects);
-    setCountry(row);
     navigate(`/country/${countryName}`);
     return row;
   };
 
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 50]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </Paper>
+    <>
+      {!loading ? (
+        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ minWidth: column.minWidth }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => {
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={row.code}
+                      >
+                        {columns.map((column) => {
+                          const value = row[column.id];
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              {column.format && typeof value === "number"
+                                ? column.format(value)
+                                : value}
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 50]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      ) : (
+        <Typography sx={{ textAlign: "center", mt: 10 }}>
+          {" "}
+          Loading ...
+          <CircularProgress disableShrink />
+        </Typography>
+      )}
+    </>
   );
 }
