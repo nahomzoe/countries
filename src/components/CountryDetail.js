@@ -32,7 +32,6 @@ const ExpandMore = styled((props) => {
 export default function CountryDetail() {
   const { countryName } = useParams();
   const [country, setCountry] = useState(null);
-  //   const [weather, setWeather] = useState(null);
 
   useEffect(() => {
     axios
@@ -41,21 +40,6 @@ export default function CountryDetail() {
         setCountry(res.data[0]);
       });
   }, []);
-
-  //   const lat = country?.latlng[0];
-  //   const long = country?.latlng[1];
-
-  //   useEffect(() => {
-  //     axios
-  //       .get(
-  //         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&units=metric&APPID=541aece78bd35a3a6081afb94884efc2`
-  //       )
-  //       .catch((error) => console.log(error))
-  //       .then((res) => {
-  //         setWeather(res.data);
-  //       });
-  //   }, [country]);
-  //   console.log(weather);
 
   const [expanded, setExpanded] = React.useState(false);
 
