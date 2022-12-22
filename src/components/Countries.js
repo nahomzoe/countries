@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { initializeCountries } from "../features/countries/countriesSlice";
+import { initializeCountries } from "../store/countries/countriesSlice";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";

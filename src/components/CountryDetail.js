@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
 import { useParams } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
@@ -13,14 +12,11 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
-
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
-
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Link from "@mui/material/Link";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import CircularProgress from "@mui/material/CircularProgress";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -36,14 +32,30 @@ const ExpandMore = styled((props) => {
 export default function CountryDetail() {
   const { countryName } = useParams();
   const [country, setCountry] = useState(null);
+  //   const [weather, setWeather] = useState(null);
 
   useEffect(() => {
     axios
       .get(`https://restcountries.com/v3.1/name/${countryName}`)
       .then((res) => {
-        setCountry(res.data);
+        setCountry(res.data[0]);
       });
   }, []);
+
+  //   const lat = country?.latlng[0];
+  //   const long = country?.latlng[1];
+
+  //   useEffect(() => {
+  //     axios
+  //       .get(
+  //         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&units=metric&APPID=541aece78bd35a3a6081afb94884efc2`
+  //       )
+  //       .catch((error) => console.log(error))
+  //       .then((res) => {
+  //         setWeather(res.data);
+  //       });
+  //   }, [country]);
+  //   console.log(weather);
 
   const [expanded, setExpanded] = React.useState(false);
 
@@ -57,7 +69,7 @@ export default function CountryDetail() {
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              {country[0].name.common.charAt(0)}
+              {country.name.common.charAt(0)}
             </Avatar>
           }
           action={
@@ -65,22 +77,22 @@ export default function CountryDetail() {
               <MoreVertIcon />
             </IconButton>
           }
-          title={country[0].name.common}
-          subheader={country[0].capital}
+          title={country.name.common}
+          subheader={country.capital}
         />
         <CardMedia
           component="img"
           height="194"
-          image={country[0].flags.png}
+          image={country.flags.png}
           alt="Paella dish"
         />
         <CardContent>
           <Typography variant="body2" color="text.secondary">
-            The country belongs to {country[0].region} and{" "}
-            {country[0].subregion} sub-region. Located at the{" "}
-            {country[0].latlng[0]} °N and {country[0].latlng[1]} °W, this
-            country has population of {country[0].population} and it has gained
-            the independent,according to the CIA World Factbook.
+            The country belongs to {country.region} and {country.subregion}{" "}
+            sub-region. Located at the {country.latlng[0]} °N and{" "}
+            {country.latlng[1]} °W, this country has population of{" "}
+            {country.population} and it has gained the independent,according to
+            the CIA World Factbook.
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
@@ -90,7 +102,7 @@ export default function CountryDetail() {
             </Link>
           </IconButton>
           <IconButton aria-label="share">
-            <Link href={country[0].maps.openStreetMaps}>
+            <Link href={country.maps.openStreetMaps}>
               <LocationOnIcon />
             </Link>
           </IconButton>
@@ -105,33 +117,8 @@ export default function CountryDetail() {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>Method:</Typography>
             <Typography paragraph>
-              Heat 1/2 cup of the broth in a pot until simmering, add saffron
-              and set aside for 10 minutes.
-            </Typography>
-            <Typography paragraph>
-              Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet
-              over medium-high heat. Add chicken, shrimp and chorizo, and cook,
-              stirring occasionally until lightly browned, 6 to 8 minutes.
-              Transfer shrimp to a large plate and set aside, leaving chicken
-              and chorizo in the pan. Add pimentón, bay leaves, garlic,
-              tomatoes, onion, salt and pepper, and cook, stirring often until
-              thickened and fragrant, about 10 minutes. Add saffron broth and
-              remaining 4 1/2 cups chicken broth; bring to a boil.
-            </Typography>
-            <Typography paragraph>
-              Add rice and stir very gently to distribute. Top with artichokes
-              and peppers, and cook without stirring, until most of the liquid
-              is absorbed, 15 to 18 minutes. Reduce heat to medium-low, add
-              reserved shrimp and mussels, tucking them down into the rice, and
-              cook again without stirring, until mussels have opened and rice is
-              just tender, 5 to 7 minutes more. (Discard any mussels that
-              don&apos;t open.)
-            </Typography>
-            <Typography>
-              Set aside off of the heat to let rest for 10 minutes, and then
-              serve.
+              place holder for weather info . . .
             </Typography>
           </CardContent>
         </Collapse>
