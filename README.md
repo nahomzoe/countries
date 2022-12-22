@@ -4,9 +4,9 @@
 
 # Description
 
-    This is a basic country  app made with react/Redux. It gives some basic info about a country.
+    This is a basic country  app made with react/Redux/Toolkit. It gives some basic info about a country.
 
-# To run on you local machine/computer.
+# run on your local machine
 
     - clone (https://github.com/nahomzoe/countries.git)
     - npm install
