@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeCountries } from "../store/countries/countriesSlice";
 import Paper from "@mui/material/Paper";
@@ -44,13 +44,13 @@ export default function Countries() {
   };
 
   const columns = [
-    { id: "flag", label: "Flag", minWidth: 40 },
-    { id: "name", label: "Name", minWidth: 40 },
-    { id: "region", label: "Region", minWidth: 40 },
+    { id: "flag", label: "Flag", minWidth: 10 },
+    { id: "name", label: "Name", minWidth: 10 },
+    { id: "region", label: "Region", minWidth: 10 },
     {
       id: "population",
       label: "Population",
-      minWidth: 40,
+      minWidth: 10,
 
       format: (value) => value.toLocaleString("en-US"),
     },
@@ -58,13 +58,13 @@ export default function Countries() {
     {
       id: "languages",
       label: "Languages",
-      minWidth: 40,
+      minWidth: 10,
       //   align: "right",
     },
     {
       id: "detail",
       label: "Detail",
-      minWidth: 40,
+      minWidth: 10,
       //   align: "right",
     },
   ];
@@ -89,7 +89,7 @@ export default function Countries() {
     );
     const languages = Object.values(row.languages || {}).map((language) => (
       <div key={language}>
-        <p>{language} </p>
+        <li>{language} </li>
       </div>
     ));
 
@@ -103,7 +103,7 @@ export default function Countries() {
     };
   }
 
-  const rows =
+  const unsorted =
     countriesList &&
     countriesList
       .filter((row) => {
@@ -122,6 +122,10 @@ export default function Countries() {
     navigate(`/country/${countryName}`);
     return row;
   };
+
+  const rows = unsorted.sort((a, b) => {
+    return a.name.common - b.name.common;
+  });
 
   return (
     <>
