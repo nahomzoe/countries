@@ -103,7 +103,7 @@ export default function Countries() {
     };
   }
 
-  const unsorted =
+  const rows =
     countriesList &&
     countriesList
       .filter((row) => {
@@ -115,6 +115,18 @@ export default function Countries() {
           return createData(row);
         }
       })
+      .sort((a, b) => {
+        let na = a.name.common;
+        let nb = b.name.common;
+        if (na < nb) {
+          return -1;
+        }
+        if (na > nb) {
+          return 1;
+        }
+        return 0;
+      })
+
       .map((row) => createData(row));
 
   const handleCountryDetail = (row) => {
@@ -122,10 +134,6 @@ export default function Countries() {
     navigate(`/country/${countryName}`);
     return row;
   };
-
-  const rows = unsorted.sort((a, b) => {
-    return a.name.common - b.name.common;
-  });
 
   return (
     <>
